@@ -1,0 +1,113 @@
+# ============================================================================
+# Core Data Processing and Analysis
+# ============================================================================
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# ============================================================================
+# Machine Learning and Recommendation Systems
+# ============================================================================
+scikit-learn>=1.3.0
+# scikit-surprise>=1.1.3  # Collaborative filtering - DISABLED: Cython build issue with Python 3.14
+# We'll use implicit library instead for collaborative filtering
+implicit>=0.7.0         # Fast collaborative filtering
+# lightfm>=1.17           # Hybrid recommendations - DISABLED: Build issue with Python 3.14
+# We'll implement custom hybrid recommender using sklearn + implicit
+
+# ============================================================================
+# Big Data Processing - Apache Spark
+# ============================================================================
+pyspark>=3.5.0
+pyarrow>=14.0.0         # Fast data serialization for Spark
+
+# ============================================================================
+# Web Framework - FastAPI
+# ============================================================================
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0  # ASGI server
+python-multipart>=0.0.6     # Form data parsing
+pydantic>=2.5.0             # Data validation
+
+# ============================================================================
+# Database
+# ============================================================================
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9  # PostgreSQL adapter
+alembic>=1.13.0         # Database migrations
+
+# ============================================================================
+# API and External Data
+# ============================================================================
+requests>=2.31.0
+httpx>=0.25.0           # Async HTTP client
+aiofiles>=23.2.0        # Async file operations
+
+# ============================================================================
+# Data Visualization
+# ============================================================================
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.18.0
+kaleido>=0.2.1          # Static image export for Plotly
+
+# ============================================================================
+# Jupyter and Interactive Development
+# ============================================================================
+jupyter>=1.0.0
+notebook>=7.0.0
+ipywidgets>=8.1.0
+jupyter-contrib-nbextensions>=0.7.0
+
+# ============================================================================
+# Utilities
+# ============================================================================
+python-dotenv>=1.0.0    # Environment variables
+tqdm>=4.66.0            # Progress bars
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# ============================================================================
+# Data Quality and Validation
+# ============================================================================
+great-expectations>=0.18.0  # Data validation
+
+# ============================================================================
+# Testing
+# ============================================================================
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+httpx>=0.25.0           # For testing FastAPI
+
+# ============================================================================
+# Code Quality
+# ============================================================================
+black>=23.12.0          # Code formatting
+flake8>=6.1.0          # Linting
+mypy>=1.7.0            # Type checking
+isort>=5.13.0          # Import sorting
+
+# ============================================================================
+# Logging and Monitoring
+# ============================================================================
+loguru>=0.7.0          # Better logging
+python-json-logger>=2.0.7
+
+# ============================================================================
+# Security
+# ============================================================================
+python-jose[cryptography]>=3.3.0  # JWT tokens
+passlib[bcrypt]>=1.7.4            # Password hashing
+python-multipart>=0.0.6            # Form parsing
+
+# ============================================================================
+# CORS and Middleware
+# ============================================================================
+fastapi-cors>=0.0.6
+
+# ============================================================================
+# Additional ML/NLP (for movie descriptions/tags)
+# ============================================================================
+nltk>=3.8.1
+spacy>=3.7.0
