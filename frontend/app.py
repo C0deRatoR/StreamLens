@@ -363,6 +363,15 @@ with st.sidebar:
         "mood": ctx_mood,
     }
 
+    st.markdown("---")
+    st.markdown(
+        "<div style='text-align: center; color: #5a5e72; font-size: 12px; margin-top: 20px;'>"
+        "Powered by <b>StreamLens Engine</b><br>"
+        "v1.0.0"
+        "</div>",
+        unsafe_allow_html=True
+    )
+
 
 def render_page_header(title: str, subtitle: str, icon: str = ""):
     _html(f"""
