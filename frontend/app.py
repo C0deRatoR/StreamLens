@@ -273,14 +273,14 @@ HTML = r"""<!DOCTYPE html>
 <div id="page-discover" class="page xl:ml-60 pt-16 pb-24 min-h-screen">
 
   <!-- Hero featured movie -->
-  <section class="px-4 md:px-8 mt-2">
-    <div id="hero-featured" class="relative w-full h-[280px] md:h-[340px] rounded-[2rem] overflow-hidden group bg-surface-container skeleton">
+  <section class="px-4 md:px-8 mt-1">
+    <div id="hero-featured" class="relative w-full h-[160px] md:h-[200px] rounded-2xl overflow-hidden group bg-surface-container skeleton">
       <!-- populated by JS -->
     </div>
   </section>
 
   <!-- Context chips -->
-  <section class="px-4 md:px-8 mt-10 overflow-x-auto hide-scrollbar">
+  <section class="px-4 md:px-8 mt-4 overflow-x-auto hide-scrollbar">
     <div class="flex items-center gap-3 py-2">
       <div class="flex items-center gap-2 bg-surface-container-low px-5 py-2.5 rounded-full border border-outline-variant/15 flex-shrink-0">
         <span class="material-symbols-outlined text-primary text-lg">tune</span>
@@ -293,8 +293,8 @@ HTML = r"""<!DOCTYPE html>
   </section>
 
   <!-- Personalised feed -->
-  <section class="px-4 md:px-8 mt-12">
-    <div class="flex justify-between items-end mb-8">
+  <section class="px-4 md:px-8 mt-6">
+    <div class="flex justify-between items-end mb-4">
       <div>
         <h2 class="text-3xl md:text-4xl font-extrabold text-on-surface tracking-tight">Personalised For You</h2>
         <p id="context-subtitle" class="text-on-surface-variant mt-1 font-medium text-sm">Loading your recommendations…</p>
@@ -314,7 +314,7 @@ HTML = r"""<!DOCTYPE html>
   </section>
 
   <!-- Top rated section -->
-  <section class="px-4 md:px-8 mt-16">
+  <section class="px-4 md:px-8 mt-8">
     <div class="flex items-center gap-4 mb-6">
       <div class="w-10 h-[2px] crimson-gradient"></div>
       <h2 class="text-xl font-extrabold tracking-tight text-on-surface uppercase tracking-widest text-sm">Top Rated This Week</h2>
@@ -325,8 +325,8 @@ HTML = r"""<!DOCTYPE html>
   </section>
 
   <!-- Editorial banner -->
-  <section class="px-4 md:px-8 mt-16 mb-8">
-    <div class="bg-surface-container-low rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden">
+  <section class="px-4 md:px-8 mt-8 mb-4">
+    <div class="bg-surface-container-low rounded-2xl p-8 md:p-10 relative overflow-hidden">
       <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
         <div class="w-full h-full crimson-gradient rounded-full blur-[100px]"></div>
       </div>
@@ -348,9 +348,9 @@ HTML = r"""<!DOCTYPE html>
 <div id="page-browse" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
 
   <!-- Search hero -->
-  <section class="max-w-4xl mx-auto mt-6 mb-12">
+  <section class="max-w-4xl mx-auto mt-2 mb-6">
     <span class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold">Explore The Lens</span>
-    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface mt-2 mb-8">What are you watching?</h1>
+    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter text-on-surface mt-1 mb-4">What are you watching?</h1>
     <div class="relative group">
       <input id="main-search" type="text" placeholder="Search movies by title…"
         class="w-full bg-surface-container-lowest border-none border-b-2 border-outline-variant/30 text-xl md:text-2xl font-bold py-5 pr-16 focus:border-primary focus:ring-0 outline-none transition-all placeholder:text-stone-300"
@@ -442,7 +442,7 @@ HTML = r"""<!DOCTYPE html>
 
 <!-- ┌──────────────────────────────────────── RATE MOVIES ──┐ -->
 <div id="page-rate" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
-  <div class="max-w-5xl mx-auto mt-12">
+  <div class="max-w-5xl mx-auto mt-2">
     <span class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold">Your Ratings</span>
     <h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface mt-2 mb-3">Rate Movies</h1>
     <p class="text-on-surface-variant font-medium mb-10">Rate movies to sharpen your personalised recommendations.</p>
@@ -467,7 +467,7 @@ HTML = r"""<!DOCTYPE html>
 
 <!-- ┌──────────────────────────────────────── PROFILE ──┐ -->
 <div id="page-profile" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
-  <div class="max-w-3xl mx-auto mt-12">
+  <div class="max-w-3xl mx-auto mt-2">
     <div class="flex items-center gap-5 mb-10">
       <div class="w-16 h-16 rounded-full crimson-gradient flex items-center justify-center text-white font-black text-2xl" id="profile-avatar">?</div>
       <div>
@@ -826,35 +826,32 @@ async function loadHeroFeatured() {
   hero.classList.remove('skeleton');
   hero.innerHTML = `
     ${poster}
-    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full lg:w-2/3 z-10">
-      <span class="inline-block px-3 py-1 crimson-gradient text-white rounded-full text-[10px] font-bold tracking-widest uppercase mb-2">Featured Premiere</span>
-      <h1 class="text-3xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-2 leading-tight">${m.title}</h1>
-      <p class="text-sm text-on-surface-variant font-medium max-w-xl mb-4">${(m.genres||[]).join(' · ')}</p>
-      <div class="flex items-center gap-3">
+    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 p-4 md:p-6 w-full lg:w-3/4 z-10">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="inline-block px-2 py-0.5 crimson-gradient text-white rounded-full text-[9px] font-bold tracking-widest uppercase">Featured</span>
+        ${m.avg_rating ? `<span class="text-xs font-black text-primary">★ ${m.avg_rating.toFixed(1)}</span>` : ''}
+      </div>
+      <h1 class="text-xl md:text-2xl font-extrabold text-on-surface tracking-tight mb-1 leading-tight">${m.title}</h1>
+      <p class="text-xs text-on-surface-variant font-medium mb-2">${(m.genres||[]).join(' · ')}</p>
+      <div class="flex items-center gap-2">
         <button onclick="openDetail(${m.movieId})"
-          class="crimson-gradient text-white px-6 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm hover:scale-105 transition-transform">
-          <span class="material-symbols-outlined fill-icon text-base">play_arrow</span> View Details
+          class="crimson-gradient text-white px-4 py-1.5 rounded-full flex items-center gap-1 font-bold text-xs hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-sm">play_arrow</span> Details
         </button>
         <button onclick="showPage('browse')"
-          class="bg-surface/80 backdrop-blur-md text-primary px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm hover:bg-surface transition-colors">
-          <span class="material-symbols-outlined text-base">add</span> Browse More
+          class="bg-surface/80 backdrop-blur-md text-primary px-3 py-1.5 rounded-full flex items-center gap-1 font-bold text-xs hover:bg-surface transition-colors">
+          <span class="material-symbols-outlined text-sm">add</span> Browse
         </button>
-      </div>
-    </div>
-    <div class="absolute bottom-6 right-6 z-10">
-      <div class="crimson-gradient p-3 rounded-xl text-white shadow-2xl flex flex-col items-center">
-        <span class="text-[9px] font-bold uppercase tracking-tighter opacity-80 mb-0.5">Avg Rating</span>
-        <span class="text-2xl font-black">${m.avg_rating ? m.avg_rating.toFixed(1) : '—'}</span>
       </div>
     </div>`;
 }
 
 function defaultHeroBanner() {
   return `<div class="absolute inset-0 crimson-gradient opacity-10"></div>
-    <div class="absolute bottom-0 left-0 p-8 z-10">
-      <h1 class="text-4xl font-extrabold text-on-surface tracking-tighter mb-4">Your<br/><span class="text-primary italic">Cinema</span></h1>
-      <button onclick="showPage('browse')" class="crimson-gradient text-white px-6 py-2.5 rounded-full font-bold text-sm">Start Exploring</button>
+    <div class="absolute bottom-0 left-0 p-4 md:p-6 z-10">
+      <h1 class="text-2xl font-extrabold text-on-surface tracking-tight mb-2">Your <span class="text-primary italic">Cinema</span></h1>
+      <button onclick="showPage('browse')" class="crimson-gradient text-white px-4 py-1.5 rounded-full font-bold text-xs">Start Exploring</button>
     </div>`;
 }
 
