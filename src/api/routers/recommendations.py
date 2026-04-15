@@ -68,10 +68,12 @@ def _format_movie_list(df: pd.DataFrame, score_col: str = None) -> List[dict]:
     result = []
     tmdb_ids = []
     for _, row in df.iterrows():
+        genres_raw = str(row["genres"]) if "genres" in row.index else ""
+        genres_arr = [g.strip() for g in genres_raw.split("|") if g.strip() and g.strip() != "(no genres listed)"]
         item = {
             "movieId": int(row["movieId"]),
             "title":   str(row["title"]) if "title" in row.index else "Unknown",
-            "genres":  str(row["genres"]) if "genres" in row.index else "",
+            "genres":  genres_arr,
         }
         if score_col and score_col in row.index:
             item["score"] = round(float(row[score_col]), 4)
@@ -87,9 +89,10 @@ def _format_movie_list(df: pd.DataFrame, score_col: str = None) -> List[dict]:
             tmdb_ids.append(tmdb_id)
         result.append(item)
 
-    # Batch-fetch poster URLs
+    # Batch-fetch poster URLs (with title fallback for search)
     if tmdb_ids and poster_service.is_available:
-        posters = poster_service.get_poster_urls_batch(tmdb_ids)
+        title_map = {str(int(i.get("tmdbId"))): i.get("title", "") for i in result if i.get("tmdbId")}
+        posters = poster_service.get_poster_urls_batch(tmdb_ids, titles=title_map)
         for item in result:
             tid = item.get("tmdbId")
             if tid:
@@ -194,14 +197,32 @@ def top_movies(
 
     top = stats.head(top_k)
     result = []
+    tmdb_ids = []
     for _, row in top.iterrows():
-        result.append({
+        genres_str = str(row["genres"]) if pd.notna(row["genres"]) else ""
+        genres_list = [g.strip() for g in genres_str.split("|") if g.strip() and g.strip() != "(no genres listed)"]
+        item = {
             "movieId":     int(row["movieId"]),
             "title":       str(row["title"]),
-            "genres":      str(row["genres"]),
+            "genres":      genres_list,
             "num_ratings": int(row["num_ratings"]),
             "avg_rating":  round(float(row["avg_rating"]), 2),
-        })
+        }
+        tmdb_id = row.get("tmdbId")
+        if tmdb_id and pd.notna(tmdb_id):
+            item["tmdbId"] = int(tmdb_id)
+            tmdb_ids.append(tmdb_id)
+        result.append(item)
+
+    # Batch-fetch poster URLs
+    if tmdb_ids and poster_service.is_available:
+        title_map = {str(int(i.get("tmdbId"))): i.get("title", "") for i in result if i.get("tmdbId")}
+        posters = poster_service.get_poster_urls_batch(tmdb_ids, titles=title_map)
+        for item in result:
+            tid = item.get("tmdbId")
+            if tid:
+                item["poster_url"] = posters.get(str(tid))
+
     return {"sort_by": sort_by, "movies": result}
 
 

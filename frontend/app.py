@@ -106,6 +106,15 @@ HTML = r"""<!DOCTYPE html>
   .reveal.visible { opacity:1; transform:translateY(0); }
   /* Toast */
   #toast { transition: opacity .3s, transform .3s; }
+  /* Poster fallback */
+  .poster-placeholder {
+    background: linear-gradient(135deg, #ffe9e8 0%, #fcdbda 50%, #ffdad9 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Fix onboarding: hide side/top nav */
+  .onboarding-active #topnav,
+  .onboarding-active aside { display: none !important; }
+  .onboarding-active .page { margin-left: 0 !important; }
 </style>
 </head>
 <body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -215,7 +224,7 @@ HTML = r"""<!DOCTYPE html>
     <div class="absolute bottom-[-10%] left-[-5%] w-[30%] h-[50%] bg-tertiary/5 blur-[100px] rounded-full"></div>
   </div>
 
-  <section class="w-full max-w-5xl mx-auto flex flex-col items-center text-center mb-14 space-y-5">
+  <section class="w-full max-w-5xl mx-auto flex flex-col items-center text-center mb-8 space-y-5 pt-4">
     <div class="inline-flex items-center gap-2">
       <span class="text-primary font-black italic tracking-tighter text-3xl">StreamLens</span>
     </div>
@@ -228,30 +237,30 @@ HTML = r"""<!DOCTYPE html>
   </section>
 
   <!-- Name input -->
-  <div class="w-full max-w-xl mx-auto mb-10">
+  <div class="w-full max-w-xl mx-auto mb-6">
     <label class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold mb-2 block">Your Name</label>
     <input id="onboard-name" type="text" placeholder="e.g. Alex" maxlength="30"
       class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/40 focus:border-primary text-2xl font-bold py-3 px-0 outline-none transition-colors placeholder:text-stone-300"/>
   </div>
 
   <!-- Genre bento grid -->
-  <section id="genre-grid" class="w-full max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-24">
+  <section id="genre-grid" class="w-full max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-32">
     <!-- populated by JS -->
   </section>
 
   <!-- Floating CTA -->
-  <footer class="fixed bottom-0 w-full p-6 flex justify-center pointer-events-none z-40">
-    <div class="frosted-glass rounded-full px-8 py-5 crimson-shadow pointer-events-auto flex items-center gap-8 md:gap-12 border border-outline-variant/10">
+  <footer id="onboard-footer" class="fixed bottom-0 w-full p-4 md:p-6 flex justify-center pointer-events-none z-40">
+    <div class="frosted-glass rounded-full px-6 md:px-8 py-4 crimson-shadow pointer-events-auto flex items-center gap-6 md:gap-12 border border-outline-variant/10">
       <div class="hidden md:flex flex-col">
         <span class="text-[10px] uppercase tracking-widest font-black text-primary/60">Selected genres</span>
         <span id="genre-count" class="text-on-surface font-black text-lg">0</span>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3">
         <button onclick="skipOnboarding()" class="text-on-surface-variant font-bold px-5 py-3 rounded-full hover:bg-surface-container transition-colors text-sm">
           Skip
         </button>
         <button id="onboard-btn" onclick="finishOnboarding()"
-          class="crimson-gradient text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 text-sm">
+          class="crimson-gradient text-white px-6 md:px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 text-sm">
           Initialize Discovery
           <span class="material-symbols-outlined text-sm">bolt</span>
         </button>
@@ -261,11 +270,11 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── DISCOVER ──┐ -->
-<div id="page-discover" class="page xl:ml-60 pt-20 pb-24 min-h-screen">
+<div id="page-discover" class="page xl:ml-60 pt-16 pb-24 min-h-screen">
 
   <!-- Hero featured movie -->
-  <section class="px-4 md:px-8 mt-6">
-    <div id="hero-featured" class="relative w-full h-[420px] md:h-[540px] rounded-[2rem] overflow-hidden group bg-surface-container skeleton">
+  <section class="px-4 md:px-8 mt-2">
+    <div id="hero-featured" class="relative w-full h-[280px] md:h-[340px] rounded-[2rem] overflow-hidden group bg-surface-container skeleton">
       <!-- populated by JS -->
     </div>
   </section>
@@ -336,10 +345,10 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── BROWSE ──┐ -->
-<div id="page-browse" class="page xl:ml-60 pt-20 pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-browse" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
 
   <!-- Search hero -->
-  <section class="max-w-4xl mx-auto mt-12 mb-16">
+  <section class="max-w-4xl mx-auto mt-6 mb-12">
     <span class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold">Explore The Lens</span>
     <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface mt-2 mb-8">What are you watching?</h1>
     <div class="relative group">
@@ -425,14 +434,14 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── MOVIE DETAIL ──┐ -->
-<div id="page-detail" class="page xl:ml-60 pt-20 pb-24 min-h-screen">
+<div id="page-detail" class="page xl:ml-60 pt-0 pb-24 min-h-screen">
   <div id="detail-content">
     <!-- populated by JS -->
   </div>
 </div>
 
 <!-- ┌──────────────────────────────────────── RATE MOVIES ──┐ -->
-<div id="page-rate" class="page xl:ml-60 pt-20 pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-rate" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
   <div class="max-w-5xl mx-auto mt-12">
     <span class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold">Your Ratings</span>
     <h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface mt-2 mb-3">Rate Movies</h1>
@@ -457,7 +466,7 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── PROFILE ──┐ -->
-<div id="page-profile" class="page xl:ml-60 pt-20 pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-profile" class="page xl:ml-60 pt-16 pb-24 px-4 md:px-12 min-h-screen">
   <div class="max-w-3xl mx-auto mt-12">
     <div class="flex items-center gap-5 mb-10">
       <div class="w-16 h-16 rounded-full crimson-gradient flex items-center justify-center text-white font-black text-2xl" id="profile-avatar">?</div>
@@ -543,6 +552,11 @@ const state = {
   featureMovies:  [],
 };
 
+// Map frontend context values to backend expected values
+const TIME_MAP   = { 'Morning':'morning', 'Afternoon':'afternoon', 'Evening':'evening', 'Late Night':'late_night' };
+const MOOD_MAP   = { 'Relaxed':'relaxed', 'Adventurous':'adventurous', 'Emotional':'thoughtful', 'Curious':'thoughtful', 'Tense':'intense' };
+const SOCIAL_MAP = { 'Solo':'alone', 'With Partner':'date', 'With Friends':'friends', 'With Family':'family' };
+
 const GENRE_ICONS = {
   Action:'local_fire_department', Adventure:'explore', Animation:'animation',
   Comedy:'sentiment_very_satisfied', Crime:'gavel', Documentary:'article',
@@ -569,6 +583,14 @@ const CONTEXT_GENRES = {
   'With Family':  ['Animation','Comedy','Children','Adventure'],
   Solo:           ['Drama','Sci-Fi','Mystery','Thriller'],
 };
+
+// Ensure genres is always an array (backend sometimes returns pipe-separated string)
+function ensureGenresArray(genres) {
+  if (!genres) return [];
+  if (Array.isArray(genres)) return genres;
+  if (typeof genres === 'string') return genres.split('|').filter(g => g && g !== '(no genres listed)');
+  return [];
+}
 
 // ── Toast ──────────────────────────────────────────────────────────────────
 let toastTimer;
@@ -598,6 +620,17 @@ function showPage(name) {
   if (pg) { pg.classList.add('active'); }
   state.currentPage = name;
   updateNavHighlight(name);
+
+  // Toggle onboarding mode (hides nav chrome)
+  const body = document.body;
+  const onboardFooter = document.getElementById('onboard-footer');
+  if (name === 'onboarding') {
+    body.classList.add('onboarding-active');
+    if (onboardFooter) onboardFooter.style.display = '';
+  } else {
+    body.classList.remove('onboarding-active');
+    if (onboardFooter) onboardFooter.style.display = 'none';
+  }
 
   if (name === 'discover')    loadDiscover();
   if (name === 'browse')      loadBrowse();
@@ -683,6 +716,7 @@ function finishOnboarding() {
   state.name = nameInput || 'Explorer';
   if (state.genres.length === 0) state.genres = ['Action','Drama','Sci-Fi'];
   document.getElementById('avatar-letter').textContent = state.name[0].toUpperCase();
+  discoverLoaded = false; // force fresh load
   showPage('discover');
 }
 
@@ -722,16 +756,21 @@ async function loadPersonalized() {
   grid.innerHTML = skeletonCards(8);
   loading.classList.remove('hidden');
 
-  const contextGenres = [
-    ...(CONTEXT_GENRES[state.context.time]   || []),
-    ...(CONTEXT_GENRES[state.context.mood]   || []),
-    ...(CONTEXT_GENRES[state.context.social] || []),
-  ];
+  // Build rated_movies array matching backend Pydantic schema
+  const ratedMovies = Object.entries(state.userRatings).map(([id, r]) => ({
+    movieId: parseInt(id),
+    rating: parseFloat(r)
+  }));
+
   const payload = {
     preferred_genres: state.genres.length ? state.genres : ['Drama','Action'],
-    context_genres:   [...new Set(contextGenres)],
-    user_ratings:     state.userRatings,
-    n:                24,
+    context: {
+      time_of_day: TIME_MAP[state.context.time]   || 'evening',
+      mood:        MOOD_MAP[state.context.mood]    || 'relaxed',
+      social:      SOCIAL_MAP[state.context.social] || 'alone',
+    },
+    rated_movies: ratedMovies,
+    top_k:        24,
   };
 
   const data = await apiFetch('/recommendations/personalized', {
@@ -742,6 +781,8 @@ async function loadPersonalized() {
 
   loading.classList.add('hidden');
   if (data && data.recommendations && data.recommendations.length) {
+    // Normalise genres to arrays
+    data.recommendations.forEach(m => { m.genres = ensureGenresArray(m.genres); });
     state.recAll  = data.recommendations;
     state.recPage = 1;
     subtitle.textContent = `Based on your taste for ${state.genres.slice(0,3).join(', ') || 'great cinema'}`;
@@ -772,51 +813,56 @@ function loadMoreRecs() {
 
 async function loadHeroFeatured() {
   const hero = document.getElementById('hero-featured');
-  const data = await apiFetch('/recommendations/top?n=5&sort_by=rating');
-  const movies = data && data.recommendations ? data.recommendations : [];
+  const data = await apiFetch('/recommendations/top?top_k=10&sort_by=rating');
+  const movies = data && data.movies ? data.movies : [];
+  // Normalise genres
+  movies.forEach(m => { m.genres = ensureGenresArray(m.genres); });
   if (!movies.length) { hero.innerHTML = defaultHeroBanner(); hero.classList.remove('skeleton'); return; }
-  const m = movies[0];
+  // Pick the first movie that has a poster, or just the first one
+  const m = movies.find(mv => mv.poster_url) || movies[0];
   const poster = m.poster_url
     ? `<img src="${m.poster_url}" class="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" alt="${m.title}"/>`
-    : `<div class="absolute inset-0 crimson-gradient opacity-30"></div>`;
+    : `<div class="absolute inset-0 crimson-gradient opacity-15"></div>`;
   hero.classList.remove('skeleton');
   hero.innerHTML = `
     ${poster}
     <div class="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full lg:w-2/3 z-10">
-      <span class="inline-block px-4 py-1 crimson-gradient text-white rounded-full text-[10px] font-bold tracking-widest uppercase mb-4">Featured Premiere</span>
-      <h1 class="text-5xl md:text-7xl font-extrabold text-on-surface tracking-tighter mb-4 leading-tight">${m.title}</h1>
-      <p class="text-base text-on-surface-variant font-medium max-w-xl mb-6">${(m.genres||[]).join(' · ')}</p>
+    <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full lg:w-2/3 z-10">
+      <span class="inline-block px-3 py-1 crimson-gradient text-white rounded-full text-[10px] font-bold tracking-widest uppercase mb-2">Featured Premiere</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-2 leading-tight">${m.title}</h1>
+      <p class="text-sm text-on-surface-variant font-medium max-w-xl mb-4">${(m.genres||[]).join(' · ')}</p>
       <div class="flex items-center gap-3">
         <button onclick="openDetail(${m.movieId})"
-          class="crimson-gradient text-white px-8 py-3 rounded-full flex items-center gap-2 font-bold hover:scale-105 transition-transform">
-          <span class="material-symbols-outlined fill-icon">play_arrow</span> View Details
+          class="crimson-gradient text-white px-6 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined fill-icon text-base">play_arrow</span> View Details
         </button>
         <button onclick="showPage('browse')"
-          class="bg-surface/80 backdrop-blur-md text-primary px-6 py-3 rounded-full flex items-center gap-2 font-bold hover:bg-surface transition-colors">
-          <span class="material-symbols-outlined">add</span> Browse More
+          class="bg-surface/80 backdrop-blur-md text-primary px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm hover:bg-surface transition-colors">
+          <span class="material-symbols-outlined text-base">add</span> Browse More
         </button>
       </div>
     </div>
-    <div class="absolute bottom-8 right-8 z-10">
-      <div class="crimson-gradient p-4 rounded-2xl text-white shadow-2xl flex flex-col items-center">
-        <span class="text-[10px] font-bold uppercase tracking-tighter opacity-80 mb-0.5">Avg Rating</span>
-        <span class="text-3xl font-black">${m.avg_rating ? m.avg_rating.toFixed(1) : '—'}</span>
+    <div class="absolute bottom-6 right-6 z-10">
+      <div class="crimson-gradient p-3 rounded-xl text-white shadow-2xl flex flex-col items-center">
+        <span class="text-[9px] font-bold uppercase tracking-tighter opacity-80 mb-0.5">Avg Rating</span>
+        <span class="text-2xl font-black">${m.avg_rating ? m.avg_rating.toFixed(1) : '—'}</span>
       </div>
     </div>`;
 }
 
 function defaultHeroBanner() {
   return `<div class="absolute inset-0 crimson-gradient opacity-10"></div>
-    <div class="absolute bottom-0 left-0 p-12 z-10">
-      <h1 class="text-6xl font-extrabold text-on-surface tracking-tighter mb-4">Your<br/><span class="text-primary italic">Cinema</span></h1>
-      <button onclick="showPage('browse')" class="crimson-gradient text-white px-8 py-3 rounded-full font-bold">Start Exploring</button>
+    <div class="absolute bottom-0 left-0 p-8 z-10">
+      <h1 class="text-4xl font-extrabold text-on-surface tracking-tighter mb-4">Your<br/><span class="text-primary italic">Cinema</span></h1>
+      <button onclick="showPage('browse')" class="crimson-gradient text-white px-6 py-2.5 rounded-full font-bold text-sm">Start Exploring</button>
     </div>`;
 }
 
 async function loadTopRated() {
-  const data = await apiFetch('/recommendations/top?n=10&sort_by=rating');
-  const movies = data && data.recommendations ? data.recommendations : [];
+  const data = await apiFetch('/recommendations/top?top_k=10&sort_by=rating');
+  let movies = data && data.movies ? data.movies : [];
+  // Normalise genres
+  movies.forEach(m => { m.genres = ensureGenresArray(m.genres); });
   const scroll = document.getElementById('top-scroll');
   if (!movies.length) { scroll.innerHTML = '<p class="text-sm text-on-surface-variant">No data from API.</p>'; return; }
   scroll.innerHTML = movies.map(m => `
@@ -824,7 +870,7 @@ async function loadTopRated() {
       <div class="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 bg-surface-container">
         ${m.poster_url
           ? `<img src="${m.poster_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${m.title}"/>`
-          : `<div class="w-full h-full crimson-gradient opacity-20 flex items-center justify-center"><span class="material-symbols-outlined text-primary text-4xl">movie_filter</span></div>`}
+          : `<div class="w-full h-full poster-placeholder"><span class="material-symbols-outlined text-primary/40 text-4xl">movie_filter</span></div>`}
         <div class="absolute top-2 right-2 crimson-gradient px-2 py-0.5 rounded text-[10px] font-black text-white">
           ${m.avg_rating ? m.avg_rating.toFixed(1) + '★' : '—'}
         </div>
@@ -880,6 +926,8 @@ async function runSearch(q) {
 
   const data = await apiFetch('/movies/search?q=' + encodeURIComponent(q) + '&limit=20');
   const movies = data && data.movies ? data.movies : [];
+  // Normalise genres
+  movies.forEach(m => { m.genres = ensureGenresArray(m.genres); });
   if (!movies.length) {
     grid.innerHTML = `<div class="col-span-full py-12 text-center text-on-surface-variant">No movies found for "${q}".</div>`;
     return;
@@ -899,8 +947,10 @@ function clearSearch() {
 }
 
 async function loadTrending() {
-  const data = await apiFetch('/recommendations/top?n=10&sort_by=popular');
-  const movies = data && data.recommendations ? data.recommendations : [];
+  const data = await apiFetch('/recommendations/top?top_k=10&sort_by=popularity');
+  let movies = data && data.movies ? data.movies : [];
+  // Normalise genres
+  movies.forEach(m => { m.genres = ensureGenresArray(m.genres); });
   const scroll = document.getElementById('trending-scroll');
   if (!movies.length) { scroll.innerHTML = '<p class="text-sm text-on-surface-variant">No data from API.</p>'; return; }
   scroll.innerHTML = movies.map(m => `
@@ -908,7 +958,7 @@ async function loadTrending() {
       <div class="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 bg-surface-container">
         ${m.poster_url
           ? `<img src="${m.poster_url}" class="absolute inset-0 w-full h-full object-cover" alt="${m.title}"/>`
-          : `<div class="absolute inset-0 flex items-center justify-center bg-surface-container-high"><span class="material-symbols-outlined text-primary/40 text-5xl">movie_filter</span></div>`}
+          : `<div class="absolute inset-0 poster-placeholder"><span class="material-symbols-outlined text-primary/40 text-5xl">movie_filter</span></div>`}
         <div class="absolute top-3 right-3 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">HOT</div>
       </div>
       <h4 class="font-bold text-on-surface group-hover:text-primary transition-colors text-sm line-clamp-1">${m.title}</h4>
@@ -929,7 +979,7 @@ async function openDetail(movieId) {
 
   const [movieData, simsData] = await Promise.all([
     apiFetch(`/movies/${movieId}`),
-    apiFetch(`/recommendations/movie/${movieId}?n=5`)
+    apiFetch(`/recommendations/movie/${movieId}?top_k=5`)
   ]);
 
   if (!movieData) {
@@ -941,13 +991,15 @@ async function openDetail(movieId) {
   }
 
   const m    = movieData;
+  m.genres = ensureGenresArray(m.genres);
   const sims = simsData && simsData.recommendations ? simsData.recommendations : [];
+  sims.forEach(s => { s.genres = ensureGenresArray(s.genres); });
   const stars = m.avg_rating ? '★'.repeat(Math.round(m.avg_rating / 5 * 5)) : '—';
   const myRating = state.userRatings[movieId] || 0;
 
   content.innerHTML = `
     <!-- Hero backdrop -->
-    <section class="relative w-full h-[400px] md:h-[580px] overflow-hidden flex items-end">
+    <section class="relative w-full h-[240px] md:h-[300px] overflow-hidden flex items-end">
       <div class="absolute inset-0">
         ${m.poster_url
           ? `<img src="${m.poster_url}" class="w-full h-full object-cover scale-105" alt="${m.title}"/>`
@@ -955,32 +1007,32 @@ async function openDetail(movieId) {
         <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent"></div>
       </div>
-      <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pb-10">
-        <div class="flex items-center gap-3 mb-4">
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pb-6">
+        <div class="flex items-center gap-3 mb-2">
           <button onclick="window.history.back()" class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-sm font-bold">
             <span class="material-symbols-outlined text-sm">arrow_back</span> Back
           </button>
         </div>
-        <div class="flex flex-wrap items-center gap-3 mb-4">
-          <div class="crimson-gradient px-4 py-1 rounded-full text-white flex items-center gap-2 shadow-lg shadow-primary/20">
-            <span class="text-[11px] font-bold tracking-widest uppercase">Avg Rating</span>
-            <span class="font-black text-lg">${m.avg_rating ? m.avg_rating.toFixed(1) : '—'}</span>
+        <div class="flex flex-wrap items-center gap-3 mb-2">
+          <div class="crimson-gradient px-3 py-1 rounded-full text-white flex items-center gap-2 shadow-lg shadow-primary/20">
+            <span class="text-[10px] font-bold tracking-widest uppercase">Avg Rating</span>
+            <span class="font-black text-base">${m.avg_rating ? m.avg_rating.toFixed(1) : '—'}</span>
           </div>
           ${m.year ? `<span class="text-xs font-bold text-on-surface-variant bg-surface-container/60 px-3 py-1 rounded-full">${m.year}</span>` : ''}
         </div>
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter text-on-surface mb-3 leading-tight">${m.title}</h1>
-        <div class="flex flex-wrap items-center gap-4 text-on-surface-variant font-medium text-sm mb-6">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tighter text-on-surface mb-2 leading-tight">${m.title}</h1>
+        <div class="flex flex-wrap items-center gap-3 text-on-surface-variant font-medium text-sm mb-4">
           ${m.avg_rating ? `<span class="flex items-center gap-1"><span class="material-symbols-outlined fill-icon text-primary text-sm">star</span>${m.avg_rating.toFixed(1)} (${(m.num_ratings||0).toLocaleString()} ratings)</span>` : ''}
           ${(m.genres||[]).map(g=>`<span>${g}</span>`).join('<span>·</span>')}
         </div>
         <div class="flex flex-wrap gap-3">
           <button onclick="openDetail(${movieId} /*noop - already here*/)"
-            class="crimson-gradient text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:scale-105 transition-transform shadow-xl shadow-primary/30">
-            <span class="material-symbols-outlined fill-icon">play_arrow</span> Watch Preview
+            class="crimson-gradient text-white px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform shadow-xl shadow-primary/30">
+            <span class="material-symbols-outlined fill-icon text-base">play_arrow</span> Watch Preview
           </button>
-          <button onclick="addToList(${movieId},'${(m.title||'').replace(/'/g,"\\'")}',true)"
-            class="bg-surface-container-lowest/80 backdrop-blur-md text-on-surface border border-outline-variant/20 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-white transition-colors">
-            <span class="material-symbols-outlined">add</span> My List
+          <button onclick="addToList(${movieId},'${(m.title||'').replace(/'/g,"\\'")}')" 
+            class="bg-surface-container-lowest/80 backdrop-blur-md text-on-surface border border-outline-variant/20 px-5 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 hover:bg-white transition-colors">
+            <span class="material-symbols-outlined text-base">add</span> My List
           </button>
         </div>
       </div>
@@ -1087,13 +1139,15 @@ async function doRateSearch(q) {
   container.innerHTML = `<p class="text-sm text-on-surface-variant">Searching…</p>`;
   const data = await apiFetch('/movies/search?q=' + encodeURIComponent(q) + '&limit=8');
   const movies = data && data.movies ? data.movies : [];
+  // Normalise genres
+  movies.forEach(m => { m.genres = ensureGenresArray(m.genres); });
   if (!movies.length) { container.innerHTML = `<p class="text-sm text-on-surface-variant">No movies found.</p>`; return; }
   container.innerHTML = movies.map(m => {
     const my = state.userRatings[m.movieId] || 0;
     return `<div class="flex items-center gap-4 bg-surface-container-low rounded-2xl px-5 py-4 hover:bg-surface-container-high transition-colors">
       ${m.poster_url
         ? `<img src="${m.poster_url}" class="w-12 h-16 object-cover rounded-xl flex-shrink-0" alt="${m.title}"/>`
-        : `<div class="w-12 h-16 bg-surface-container flex-shrink-0 rounded-xl flex items-center justify-center"><span class="material-symbols-outlined text-primary/40">movie_filter</span></div>`}
+        : `<div class="w-12 h-16 poster-placeholder flex-shrink-0 rounded-xl"><span class="material-symbols-outlined text-primary/40">movie_filter</span></div>`}
       <div class="flex-1 min-w-0">
         <p class="font-bold text-on-surface text-sm line-clamp-1">${m.title}</p>
         <p class="text-xs text-on-surface-variant">${(m.genres||[]).slice(0,3).join(' · ')}</p>
@@ -1292,12 +1346,20 @@ async function checkAPIHealth() {
   const dot   = document.getElementById('api-dot');
   const label = document.getElementById('api-label');
   const data  = await apiFetch('/health');
-  if (data && data.status === 'healthy') {
-    dot.className   = 'w-2 h-2 rounded-full bg-green-500';
-    label.textContent = 'API Online';
+  if (data && data.status === 'ok') {
+    // Check if all models are loaded
+    const models = data.models || {};
+    const allLoaded = models.content_based && models.collaborative && models.hybrid;
+    if (allLoaded) {
+      dot.className   = 'w-2 h-2 rounded-full bg-green-500';
+      label.textContent = 'API Online';
+    } else {
+      dot.className   = 'w-2 h-2 rounded-full bg-yellow-400';
+      label.textContent = 'Partial Load';
+    }
   } else if (data) {
     dot.className   = 'w-2 h-2 rounded-full bg-yellow-400';
-    label.textContent = 'Loading Models';
+    label.textContent = 'Starting Up…';
   } else {
     dot.className   = 'w-2 h-2 rounded-full bg-red-400';
     label.textContent = 'API Offline';
@@ -1314,6 +1376,7 @@ function attachReveal() {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', async () => {
+  document.body.classList.add('onboarding-active');
   await initGenreGrid();
   checkAPIHealth();
   setInterval(checkAPIHealth, 30000);
