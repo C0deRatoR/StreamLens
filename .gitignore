@@ -173,6 +173,7 @@ logs/
 *.log
 
 # Database
+*.docx
 *.db
 *.sqlite
 
@@ -198,3 +199,7 @@ frontend/.env.production.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Docs
+docs/
+PROJECT_DOCS.md
