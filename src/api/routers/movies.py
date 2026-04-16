@@ -48,11 +48,17 @@ def search_movies(
         cols.append("tmdbId")
     movies_list = results[cols].to_dict(orient="records")
 
+    # Split genres into arrays
+    for m in movies_list:
+        g = m.get("genres", "")
+        m["genres"] = [x.strip() for x in str(g).split("|") if x.strip() and x.strip() != "(no genres listed)"]
+
     # Fetch poster URLs
     if poster_service.is_available:
         tmdb_ids = [m["tmdbId"] for m in movies_list if m.get("tmdbId") and str(m["tmdbId"]) != 'nan']
         if tmdb_ids:
-            posters = poster_service.get_poster_urls_batch(tmdb_ids)
+            title_map = {str(int(m["tmdbId"])): m.get("title", "") for m in movies_list if m.get("tmdbId") and str(m["tmdbId"]) != 'nan'}
+            posters = poster_service.get_poster_urls_batch(tmdb_ids, titles=title_map)
             for m in movies_list:
                 tid = m.get("tmdbId")
                 if tid and str(tid) != 'nan':
@@ -93,7 +99,7 @@ def get_movie(movie_id: int):
     result = {
         "movieId": int(movie["movieId"]),
         "title":   str(movie["title"]),
-        "genres":  str(movie["genres"]).split("|"),
+        "genres":  [g.strip() for g in str(movie["genres"]).split("|") if g.strip() and g.strip() != "(no genres listed)"],
         **stats,
     }
 
@@ -102,6 +108,6 @@ def get_movie(movie_id: int):
     if tmdb_id and str(tmdb_id) != 'nan':
         result["tmdbId"] = int(tmdb_id)
         if poster_service.is_available:
-            result["poster_url"] = poster_service.get_poster_url(int(tmdb_id))
+            result["poster_url"] = poster_service.get_poster_url(int(tmdb_id), title=str(movie["title"]))
 
     return result

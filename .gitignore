@@ -147,6 +147,8 @@ cython_debug/
 Thumbs.db
 
 # Project specific
+stitch_*/
+
 data/raw/*
 data/processed/*
 data/external/*
