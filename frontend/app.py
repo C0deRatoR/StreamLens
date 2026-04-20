@@ -270,7 +270,7 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── DISCOVER ──┐ -->
-<div id="page-discover" class="page xl:ml-60 pt-[52px] pb-24 min-h-screen">
+<div id="page-discover" class="page xl:ml-60 pt-[72px] pb-24 min-h-screen">
 
   <!-- Hero featured movie -->
   <section class="px-4 md:px-8 mt-1">
@@ -345,7 +345,7 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── BROWSE ──┐ -->
-<div id="page-browse" class="page xl:ml-60 pt-[52px] pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-browse" class="page xl:ml-60 pt-[72px] pb-24 px-4 md:px-12 min-h-screen">
 
   <!-- Search hero -->
   <section class="max-w-4xl mx-auto mt-0 mb-6">
@@ -441,7 +441,7 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── RATE MOVIES ──┐ -->
-<div id="page-rate" class="page xl:ml-60 pt-[52px] pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-rate" class="page xl:ml-60 pt-[72px] pb-24 px-4 md:px-12 min-h-screen">
   <div class="max-w-5xl mx-auto mt-0">
     <span class="text-[11px] uppercase tracking-[0.2em] text-primary font-extrabold">Your Ratings</span>
     <h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface mt-2 mb-3">Rate Movies</h1>
@@ -466,7 +466,7 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <!-- ┌──────────────────────────────────────── PROFILE ──┐ -->
-<div id="page-profile" class="page xl:ml-60 pt-[52px] pb-24 px-4 md:px-12 min-h-screen">
+<div id="page-profile" class="page xl:ml-60 pt-[72px] pb-24 px-4 md:px-12 min-h-screen">
   <div class="max-w-3xl mx-auto mt-2">
     <div class="flex items-center gap-5 mb-10">
       <div class="w-16 h-16 rounded-full crimson-gradient flex items-center justify-center text-white font-black text-2xl" id="profile-avatar">?</div>
@@ -1101,7 +1101,7 @@ async function openDetail(movieId) {
             <h3 class="text-[11px] uppercase tracking-widest text-primary font-extrabold mb-4">Your Rating</h3>
             <div class="flex gap-1" id="detail-stars-${movieId}">
               ${[1,2,3,4,5].map(s=>`
-                <button class="star text-3xl ${s<=myRating?'text-primary':'text-outline/30'}"
+                <button class="star text-[2.5rem] lg:text-5xl ${s<=myRating?'text-primary':'text-outline/30'}"
                   onclick="rateMovieDetail(${movieId},'${(m.title||'').replace(/'/g,"\\'")}',${s})"
                   onmouseover="previewStars(${movieId},${s})"
                   onmouseleave="resetStars(${movieId},${myRating})"
@@ -1151,7 +1151,7 @@ async function doRateSearch(q) {
         <p class="text-xs text-on-surface-variant">${(m.genres||[]).slice(0,3).join(' · ')}</p>
         <div class="flex gap-1 mt-2">
           ${[1,2,3,4,5].map(s=>`
-            <button class="star text-2xl ${s<=my?'text-primary':'text-outline/30'}"
+            <button class="star text-4xl ${s<=my?'text-primary':'text-outline/30'}"
               onclick="rateMovie(${m.movieId},'${(m.title||'').replace(/'/g,"\\'")}',${s})"
             >★</button>`).join('')}
         </div>
@@ -1183,14 +1183,14 @@ function previewStars(movieId, n) {
   const container = document.getElementById(`detail-stars-${movieId}`);
   if (!container) return;
   container.querySelectorAll('.star').forEach((s,i)=>{
-    s.className = `star text-3xl ${i<n?'text-primary':'text-outline/30'}`;
+    s.className = `star text-[2.5rem] lg:text-5xl ${i<n?'text-primary':'text-outline/30'}`;
   });
 }
 function resetStars(movieId, n) {
   const container = document.getElementById(`detail-stars-${movieId}`);
   if (!container) return;
   container.querySelectorAll('.star').forEach((s,i)=>{
-    s.className = `star text-3xl ${i<n?'text-primary':'text-outline/30'}`;
+    s.className = `star text-[2.5rem] lg:text-5xl ${i<n?'text-primary':'text-outline/30'}`;
   });
 }
 
@@ -1207,7 +1207,7 @@ function renderRatingHistory() {
       <div>
         <p class="font-bold text-on-surface text-sm">${title}</p>
         <div class="flex gap-0.5 mt-1">${[1,2,3,4,5].map(s=>`
-          <span class="text-xl ${s<=r?'text-primary':'text-outline/30'}">★</span>`).join('')}
+          <span class="text-3xl ${s<=r?'text-primary':'text-outline/30'}">★</span>`).join('')}
         </div>
       </div>
       <button onclick="delete state.userRatings[${id}]; delete state.titleCache[${id}]; renderRatingHistory();"
