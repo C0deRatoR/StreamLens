@@ -122,7 +122,10 @@ class ContentBasedRecommender:
 
         movie_indices = [i[0] for i in sim_scores]
 
-        result = self.movies_df.iloc[movie_indices][['movieId', 'title', 'genres']].copy()
+        cols = ['movieId', 'title', 'genres']
+        if 'tmdbId' in self.movies_df.columns:
+            cols.append('tmdbId')
+        result = self.movies_df.iloc[movie_indices][cols].copy()
         result['similarity_score'] = [i[1] for i in sim_scores]
         return result
 
