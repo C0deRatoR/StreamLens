@@ -31,14 +31,17 @@ def train_and_save():
     print("StreamLens - Model Training Pipeline")
     print("=" * 60)
     
+    # Derive project root from __file__ to handle execution from any directory
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+    
     # Paths
-    DATA_PATH = Path('data/processed')
-    MODELS_PATH = Path('models')
+    DATA_PATH = PROJECT_ROOT / 'data/processed'
+    MODELS_PATH = PROJECT_ROOT / 'models'
     MODELS_PATH.mkdir(exist_ok=True)
     
     # 1. Load Data
     print("\n📊 Loading processed data...")
-    RAW_PATH = Path('data/raw/ml-latest')
+    RAW_PATH = PROJECT_ROOT / 'data/raw/ml-latest'
     try:
         # Try processed first, fall back to raw
         if (DATA_PATH / 'movies_processed.csv').exists():
