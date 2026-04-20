@@ -545,6 +545,7 @@ const state = {
   genres:         [],       // selected preferred genres
   context:        { time:'Evening', mood:'Relaxed', social:'Solo' },
   userRatings:    {},       // { movieId: rating }
+  titleCache:     {},       // { movieId: title }
   allGenres:      [],
   recPage:        1,
   recAll:         [],
@@ -1162,6 +1163,7 @@ async function doRateSearch(q) {
 
 function rateMovie(movieId, title, score) {
   state.userRatings[movieId] = score;
+  state.titleCache[movieId] = title;
   showToast(`Rated "${title}" ${score}/5 ⭐`);
   rateSearch(); // refresh the list
   renderRatingHistory();
@@ -1170,6 +1172,7 @@ function rateMovie(movieId, title, score) {
 
 function rateMovieDetail(movieId, title, score) {
   state.userRatings[movieId] = score;
+  state.titleCache[movieId] = title;
   showToast(`Rated "${title}" ${score}/5 ⭐`);
   // update stars in the detail view
   resetStars(movieId, score);
@@ -1197,17 +1200,20 @@ function renderRatingHistory() {
   const entries = Object.entries(state.userRatings);
   if (!entries.length) { noMsg.style.display='block'; return; }
   noMsg.style.display = 'none';
-  hist.innerHTML = entries.map(([id, r])=>`
+  hist.innerHTML = entries.map(([id, r])=>{
+    const title = state.titleCache[id] || `Movie #${id}`;
+    return `
     <div class="flex items-center justify-between bg-surface-container-low rounded-2xl px-5 py-4">
       <div>
-        <p class="font-bold text-on-surface text-sm">Movie #${id}</p>
+        <p class="font-bold text-on-surface text-sm">${title}</p>
         <div class="flex gap-0.5 mt-1">${[1,2,3,4,5].map(s=>`
           <span class="text-sm ${s<=r?'text-primary':'text-outline/30'}">★</span>`).join('')}
         </div>
       </div>
-      <button onclick="delete state.userRatings[${id}]; renderRatingHistory();"
+      <button onclick="delete state.userRatings[${id}]; delete state.titleCache[${id}]; renderRatingHistory();"
         class="text-xs text-on-surface-variant hover:text-primary transition-colors font-bold">Remove</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ── Profile page ───────────────────────────────────────────────────────────
