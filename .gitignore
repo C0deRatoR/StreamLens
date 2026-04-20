@@ -203,3 +203,4 @@ yarn-error.log*
 # Docs
 docs/
 PROJECT_DOCS.md
+*.pdf
